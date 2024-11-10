@@ -3,20 +3,27 @@ package lab1;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.ArrayList;
+
 
 public class Group {
     private String groupNumber;
-    private LocalDate yearCreated;
     private String department;
-    private Teacher curator;
+    private LocalDate yearCreated;
+    private Teacher teacher;
     private List<Student> students;
 
-    public Group(String groupNumber, String department, LocalDate yearCreated, Teacher curator, List<Student> students) {
-        this.groupNumber = groupNumber; // Використовуйте правильний параметр
-        this.yearCreated = yearCreated;
+    // Статичний список для зберігання всіх груп
+    private static List<Group> allGroups = new ArrayList<>();
+
+    // Оновлений конструктор
+    public Group(String groupNumber, String department, LocalDate yearCreated, Teacher teacher, List<Student> students) {
+        this.groupNumber = groupNumber;
         this.department = department;
-        this.curator = curator;
+        this.yearCreated = yearCreated;
+        this.teacher = teacher;
         this.students = students;
+        allGroups.add(this); // Додаємо групу до списку під час створення
     }
 
     // Геттери
@@ -24,29 +31,33 @@ public class Group {
         return groupNumber;
     }
 
-    public LocalDate getYearCreated() {
-        return yearCreated;
-    }
-
     public String getDepartment() {
         return department;
     }
 
-    public Teacher getCurator() {
-        return curator;
+    public LocalDate getYearCreated() {
+        return yearCreated;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
     }
 
     public List<Student> getStudents() {
         return students;
     }
 
+    public static List<Group> getAllGroups() {
+        return allGroups;
+    }
+
     @Override
     public String toString() {
         return "Group{" +
                 "groupNumber='" + groupNumber + '\'' +
-                ", yearCreated=" + yearCreated +
                 ", department='" + department + '\'' +
-                ", curator=" + curator +
+                ", yearCreated=" + yearCreated +
+                ", teacher=" + teacher +
                 ", students=" + students +
                 '}';
     }
@@ -56,15 +67,13 @@ public class Group {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Group group = (Group) o;
-        return yearCreated.equals(group.yearCreated) &&
-                Objects.equals(groupNumber, group.groupNumber) &&
+        return Objects.equals(groupNumber, group.groupNumber) &&
                 Objects.equals(department, group.department) &&
-                Objects.equals(curator, group.curator) &&
-                Objects.equals(students, group.students);
+                Objects.equals(yearCreated, group.yearCreated);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(groupNumber, yearCreated, department, curator, students);
+        return Objects.hash(groupNumber, department, yearCreated);
     }
 }

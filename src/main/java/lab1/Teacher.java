@@ -19,6 +19,19 @@ public class Teacher {
         this(firstName, lastName, "Unknown"); // Встановлюємо значення за замовчуванням для subject
     }
 
+    // Гетери для кожного поля
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
     @Override
     public String toString() {
         return "Teacher{" +

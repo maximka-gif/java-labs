@@ -7,74 +7,78 @@ public class Variant10 {
      * @return перша цифра числа (сотні)
      */
     public int getHundredsDigit(int number) {
+        // Перевірка, чи є число тризначним
+        if (number < 100 || number > 999) {
+            throw new IllegalArgumentException("Число повинно бути тризначним");
+        }
         return number / 100;
     }
 
     /**
-     * @param A перше число
-     * @param B друге число
+     * @param a перше число
+     * @param b друге число
      * @return true, якщо обидва числа непарні
      */
-    public boolean areBothOdd(int A, int B) {
-        return A % 2 != 0 && B % 2 != 0;
+    public boolean areBothOdd(int a, int b) {
+        return a % 2 != 0 && b % 2 != 0;
     }
 
     /**
-     * @param A перше число
-     * @param B друге число
-     * @return нові значення A та B після перерозподілу
+     * @param a перше число
+     * @param b друге число
+     * @return нові значення a та b після перерозподілу
      */
-    public double[] swapAndOrder(double A, double B) {
-        if (A > B) {
-            double temp = A;
-            A = B;
-            B = temp;
+    public double[] swapAndOrder(double a, double b) {
+        if (a > b) {
+            double temp = a;
+            a = b;
+            b = temp;
         }
-        return new double[]{A, B};
+        return new double[]{a, b};
     }
 
     /**
-     * @param D день
-     * @param M місяць
+     * @param d день
+     * @param m місяць
      * @return наступна дата
      */
-    public int[] nextDate(int D, int M) {
-        switch (M) {
+    public int[] nextDate(int d, int m) {
+        switch (m) {
             case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-                if (D < 31) return new int[]{D + 1, M};
-                return new int[]{1, (M % 12) + 1};
+                if (d < 31) return new int[]{d + 1, m};
+                return new int[]{1, (m % 12) + 1};
             case 4: case 6: case 9: case 11:
-                if (D < 30) return new int[]{D + 1, M};
-                return new int[]{1, M + 1};
+                if (d < 30) return new int[]{d + 1, m};
+                return new int[]{1, m + 1};
             case 2:
-                if (D < 28) return new int[]{D + 1, M};
-                return new int[]{1, M + 1};
+                if (d < 28) return new int[]{d + 1, m};
+                return new int[]{1, m + 1};
             default:
-                return new int[]{D, M}; // Невірний місяць
+                return new int[]{d, m}; // Невірний місяць
         }
     }
 
     /**
-     * @param A перше число
-     * @param B друге число
-     * @return сума квадратів чисел від A до B включно
+     * @param a перше число
+     * @param b друге число
+     * @return сума квадратів чисел від a до b включно
      */
-    public int sumOfSquares(int A, int B) {
+    public int sumOfSquares(int a, int b) {
         int sum = 0;
-        for (int i = A; i <= B; i++) {
+        for (int i = a; i <= b; i++) {
             sum += i * i;
         }
         return sum;
     }
 
     /**
-     * @param N число
-     * @return найбільше K, таке що 3^K < N
+     * @param n число
+     * @return найбільше k, таке що 3^k < n
      */
-    public int largestK(int N) {
+    public int largestK(int n) {
         int sum = 0;
         int k = 0;
-        while (sum + k + 1 <= N) {
+        while (sum + k + 1 <= n) {
             k++;
             sum += k;
         }
@@ -105,25 +109,20 @@ public class Variant10 {
     }
 
     /**
-     * @param M кількість рядків
-     * @param N кількість стовпців
-     * @param D додаток
+     * @param m кількість рядків
+     * @param n кількість стовпців
+     * @param d додаток
      * @param numbers масив чисел для першого стовпця
-     * @return матриця MxN
+     * @return матриця mxn
      */
-    public int[][] createMatrix(int M, int N, int D, int[] numbers) {
-        int[][] matrix = new int[M][N];
-        for (int i = 0; i < M; i++) {
+    public int[][] createMatrix(int m, int n, int d, int[] numbers) {
+        int[][] matrix = new int[m][n];
+        for (int i = 0; i < m; i++) {
             matrix[i][0] = numbers[i];
-            for (int j = 1; j < N; j++) {
-                matrix[i][j] = matrix[i][j - 1] + D;
+            for (int j = 1; j < n; j++) {
+                matrix[i][j] = matrix[i][j - 1] + d;
             }
         }
         return matrix;
-    }
-
-    public static void main(String... strings) {
-        System.out.println("Start of lab0");
-        System.out.println("Done!!!");
     }
 }

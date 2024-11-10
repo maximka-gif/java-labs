@@ -16,28 +16,28 @@ public class MainLab3 {
         YamlSerializer<Student> yamlSerializer = new YamlSerializer<>(Student.class);
 
         try {
-            // Серіалізація та запис у JSON
-            String json = jsonSerializer.serialize(student);
-            System.out.println("Serialized JSON: " + json);
-            jsonSerializer.writeToFile(student, new File("student.json"));
-
-            // Читання з файлу JSON
-            Student studentFromJson = jsonSerializer.readFromFile(new File("student.json"));
-            System.out.println("Deserialized from JSON file: " + studentFromJson);
-
-            // Серіалізація та запис у XML
-            String xml = xmlSerializer.serialize(student);
-            System.out.println("Serialized XML: " + xml);
-            xmlSerializer.writeToFile(student, new File("student.xml"));
-
-            // Читання з файлу XML
-            Student studentFromXml = xmlSerializer.readFromFile(new File("student.xml"));
-            System.out.println("Deserialized from XML file: " + studentFromXml);
-
-            // Серіалізація та запис у YAML
-            String yaml = yamlSerializer.serialize(student);
-            System.out.println("Serialized YAML: " + yaml);
-            yamlSerializer.writeToFile(student, new File("student.yaml"));
+//            // Закоментовано серіалізацію та запис у JSON
+//            // String json = jsonSerializer.serialize(student);
+//            // System.out.println("Serialized JSON: " + json);
+//            // jsonSerializer.writeToFile(student, new File("student.json"));
+//
+//            // Читання з файлу JSON
+//            Student studentFromJson = jsonSerializer.readFromFile(new File("student.json"));
+//            System.out.println("Deserialized from JSON file: " + studentFromJson);
+//
+//            // Закоментовано серіалізацію та запис у XML
+//            // String xml = xmlSerializer.serialize(student);
+//            // System.out.println("Serialized XML: " + xml);
+//            // xmlSerializer.writeToFile(student, new File("student.xml"));
+//
+//            // Читання з файлу XML
+//            Student studentFromXml = xmlSerializer.readFromFile(new File("student.xml"));
+//            System.out.println("Deserialized from XML file: " + studentFromXml);
+//
+//            // Закоментовано серіалізацію та запис у YAML
+//            // String yaml = yamlSerializer.serialize(student);
+//            // System.out.println("Serialized YAML: " + yaml);
+//            // yamlSerializer.writeToFile(student, new File("student.yaml"));
 
             // Читання з файлу YAML
             Student studentFromYaml = yamlSerializer.readFromFile(new File("student.yaml"));

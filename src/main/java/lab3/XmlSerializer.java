@@ -1,6 +1,7 @@
 package lab3;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.File;
 import java.io.IOException;
 
@@ -10,6 +11,7 @@ public class XmlSerializer<T> implements Serializer<T> {
 
     public XmlSerializer(Class<T> clazz) {
         this.clazz = clazz;
+        xmlMapper.registerModule(new JavaTimeModule()); // Додаємо підтримку для LocalDate
     }
 
     @Override

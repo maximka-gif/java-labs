@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 import lab1.Student;
 
@@ -20,7 +20,6 @@ public class SerializerTest {
     private final ObjectMapper jsonMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     private final ObjectMapper xmlMapper = new XmlMapper().registerModule(new JavaTimeModule());
     private final ObjectMapper yamlMapper = new YAMLMapper().registerModule(new JavaTimeModule());
-
 
     @Test
     public void testSerializeDeserializeJson() throws IOException {
@@ -37,7 +36,7 @@ public class SerializerTest {
 
         // Десеріалізація з JSON
         Student deserializedStudent = jsonMapper.readValue(json, Student.class);
-        Assert.assertEquals(student, deserializedStudent);
+        Assertions.assertEquals(student, deserializedStudent);
     }
 
     @Test
@@ -55,7 +54,7 @@ public class SerializerTest {
 
         // Десеріалізація з XML
         Student deserializedStudent = xmlMapper.readValue(xml, Student.class);
-        Assert.assertEquals(student, deserializedStudent);
+        Assertions.assertEquals(student, deserializedStudent);
     }
 
     @Test
@@ -73,7 +72,7 @@ public class SerializerTest {
 
         // Десеріалізація з YAML
         Student deserializedStudent = yamlMapper.readValue(yaml, Student.class);
-        Assert.assertEquals(student, deserializedStudent);
+        Assertions.assertEquals(student, deserializedStudent);
     }
 
     // Метод для створення студента

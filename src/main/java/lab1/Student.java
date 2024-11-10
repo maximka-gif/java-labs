@@ -1,7 +1,11 @@
 package lab1;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.time.format.DateTimeFormatter;
 
@@ -13,11 +17,20 @@ public class Student {
     private LocalDate birthDate;
     private String recordBookNumber;
 
-    public Student(String firstName, String lastName, LocalDate birthDate, String recordBookNumber) {
+    // Статичний список для зберігання всіх студентів
+    private static List<Student> allStudents = new ArrayList<>();
+
+    // Конструктор з анотацією JsonCreator для десеріалізації
+    @JsonCreator
+    public Student(@JsonProperty("firstName") String firstName,
+                   @JsonProperty("lastName") String lastName,
+                   @JsonProperty("birthDate") LocalDate birthDate,
+                   @JsonProperty("recordBookNumber") String recordBookNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.recordBookNumber = recordBookNumber;
+        allStudents.add(this); // Додаємо студента в список під час створення
     }
 
     // Геттери
@@ -37,6 +50,10 @@ public class Student {
         return recordBookNumber;
     }
 
+    public static List<Student> getAllStudents() {
+        return allStudents;
+    }
+
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -47,7 +64,6 @@ public class Student {
                 ", recordBookNumber='" + recordBookNumber + '\'' +
                 '}';
     }
-
 
     @Override
     public boolean equals(Object o) {

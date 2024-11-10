@@ -1,6 +1,7 @@
 package lab3;
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.File;
 import java.io.IOException;
 
@@ -10,6 +11,7 @@ public class YamlSerializer<T> implements Serializer<T> {
 
     public YamlSerializer(Class<T> clazz) {
         this.clazz = clazz;
+        yamlMapper.registerModule(new JavaTimeModule()); // Додаємо підтримку для LocalDate
     }
 
     @Override

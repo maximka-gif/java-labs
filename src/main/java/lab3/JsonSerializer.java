@@ -1,15 +1,18 @@
 package lab3;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 
 public class JsonSerializer<T> implements Serializer<T> {
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private final Class<T> clazz;
+    private final ObjectMapper objectMapper;
+    private final Class<T> clazz; // Додано поле clazz
 
     public JsonSerializer(Class<T> clazz) {
         this.clazz = clazz;
+        this.objectMapper = new ObjectMapper();
+        this.objectMapper.registerModule(new JavaTimeModule()); // Реєстрація модуля для підтримки LocalDate
     }
 
     @Override
