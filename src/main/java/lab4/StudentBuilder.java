@@ -13,8 +13,8 @@ public class StudentBuilder {
     private LocalDate birthDate;
     private String recordBookNumber;
 
-    private static final String NAME_REGEX = "^[A-Za-z]+$"; // регулярний вираз для імені та прізвища
-    private static final String RECORD_BOOK_REGEX = "^[A-Za-z0-9]+$"; // регулярний вираз для номера заліковки
+    private static final String NAME_REGEX = "^[A-Za-zÀ-ÿ]+(?:['-][A-Za-zÀ-ÿ]+)*$";
+    private static final String RECORD_BOOK_REGEX = "^[A-Za-z0-9]{4,10}$"; // регулярний вираз для номера заліковки
     private static final LocalDate MIN_BIRTH_DATE = LocalDate.of(1900, 1, 1);
     private static final LocalDate MAX_BIRTH_DATE = LocalDate.now();
 
@@ -38,33 +38,35 @@ public class StudentBuilder {
         return this;
     }
 
-    // Метод валідації
-    private List<String> validate() {
+    public Student build() {
         List<String> errors = new ArrayList<>();
 
+        // Перевірка імені
         if (firstName == null || !Pattern.matches(NAME_REGEX, firstName)) {
             errors.add("Invalid first name: " + firstName);
         }
+
+        // Перевірка прізвища
         if (lastName == null || !Pattern.matches(NAME_REGEX, lastName)) {
             errors.add("Invalid last name: " + lastName);
         }
+
+        // Перевірка дати народження
         if (birthDate == null || birthDate.isBefore(MIN_BIRTH_DATE) || birthDate.isAfter(MAX_BIRTH_DATE)) {
             errors.add("Birth date must be between " + MIN_BIRTH_DATE + " and " + MAX_BIRTH_DATE);
         }
+
+        // Перевірка номера заліковки
         if (recordBookNumber == null || !Pattern.matches(RECORD_BOOK_REGEX, recordBookNumber)) {
             errors.add("Invalid record book number: " + recordBookNumber);
         }
 
-        return errors;
-    }
-
-    public Student build() {
-        List<String> errors = validate();
-
+        // Якщо є помилки, кидаємо виключення
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException("Invalid fields:\n" + String.join("\n", errors));
         }
 
+        // Повертаємо створеного студента
         return new Student(firstName, lastName, birthDate, recordBookNumber);
     }
 }

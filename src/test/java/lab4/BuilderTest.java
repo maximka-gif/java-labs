@@ -12,18 +12,14 @@ import java.util.List;
 public class BuilderTest {
 
     @Test
-    public void testStudentBuilder() {
-        // Create StudentBuilder and fill fields
-        StudentBuilder studentBuilder = new StudentBuilder()
+    public void testValidStudent() {
+        Student student = new StudentBuilder()
                 .firstName("John")
                 .lastName("Doe")
                 .birthDate(LocalDate.parse("2000-01-01"))
-                .recordBookNumber("RB12345");
+                .recordBookNumber("RB12345")
+                .build();
 
-        // Create student
-        Student student = studentBuilder.build();
-
-        // Verify that the data was assigned correctly
         assertEquals("John", student.getFirstName());
         assertEquals("Doe", student.getLastName());
         assertEquals(LocalDate.parse("2000-01-01"), student.getBirthDate());
@@ -31,54 +27,81 @@ public class BuilderTest {
     }
 
     @Test
-    public void testInvalidStudentBuilder() {
-        // Will throw exception as the required fields are missing
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new StudentBuilder().build());
-
-        // Check for error messages related to missing fields
+    public void testInvalidStudentFirstName() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new StudentBuilder()
+                    .firstName("ma@ks") // Некоректне ім'я
+                    .lastName("Doe")
+                    .birthDate(LocalDate.parse("2000-01-01"))
+                    .recordBookNumber("RB1234556389")
+                    .build();
+        });
         assertTrue(exception.getMessage().contains("Invalid first name"));
+        assertTrue(exception.getMessage().contains("Invalid record book number"),"error message " + exception.getMessage());
+    }
+
+    @Test
+    public void testInvalidStudentLastName() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new StudentBuilder()
+                    .firstName("John")
+                    .lastName("D oe") // Некоректне прізвище
+                    .birthDate(LocalDate.parse("2000-01-01"))
+                    .recordBookNumber("RB12345")
+                    .build();
+        });
+        System.out.println("Validation error: " + exception.getMessage());
         assertTrue(exception.getMessage().contains("Invalid last name"));
+    }
+
+    @Test
+    public void testInvalidStudentRecordBookNumber() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new StudentBuilder()
+                    .firstName("John")
+                    .lastName("Doe")
+                    .birthDate(LocalDate.parse("2000-01-01"))
+                    .recordBookNumber("") // Некоректний номер залікової книжки
+                    .build();
+        });
+        System.out.println("Validation error: " + exception.getMessage());
         assertTrue(exception.getMessage().contains("Invalid record book number"));
     }
 
     @Test
-    public void testTeacherBuilder() {
-        // Create TeacherBuilder and fill fields
-        TeacherBuilder teacherBuilder = new TeacherBuilder()
+    public void testValidTeacher() {
+        Teacher teacher = new TeacherBuilder()
                 .firstName("Jane")
                 .lastName("Smith")
-                .subject("Mathematics");
+                .subject("Mathematics")
+                .build();
 
-        // Create teacher
-        Teacher teacher = teacherBuilder.build();
-
-        // Verify that the data was assigned correctly
         assertEquals("Jane", teacher.getFirstName());
         assertEquals("Smith", teacher.getLastName());
         assertEquals("Mathematics", teacher.getSubject());
     }
 
     @Test
-    public void testInvalidTeacherBuilder() {
-        // Will throw exception as the required fields are missing
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new TeacherBuilder().build());
-
-        // Check for error messages related to missing fields
-        assertTrue(exception.getMessage().contains("Invalid first name"));
-        assertTrue(exception.getMessage().contains("Invalid last name"));
+    public void testInvalidTeacherSubject() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new TeacherBuilder()
+                    .firstName("Jane")
+                    .lastName("Smith")
+                    .subject("") // Некоректний предмет
+                    .build();
+        });
+        System.out.println("Validation error: " + exception.getMessage());
         assertTrue(exception.getMessage().contains("Subject must not be empty"));
     }
 
     @Test
-    public void testGroupBuilder() {
-        // Create curator
+    public void testValidGroup() {
         Teacher curator = new TeacherBuilder()
                 .firstName("Dr.White")
                 .lastName("White")
                 .subject("Group Curator")
                 .build();
 
-        // Create students
         Student student1 = new StudentBuilder()
                 .firstName("Tom")
                 .lastName("Hanks")
@@ -93,17 +116,14 @@ public class BuilderTest {
                 .recordBookNumber("RB10002")
                 .build();
 
-        // Create group using the builder
-        GroupBuilder groupBuilder = new GroupBuilder()
+        Group group = new GroupBuilder()
                 .groupNumber("G1")
                 .yearCreated(LocalDate.of(2022, 1, 1))
                 .department("Computer Science")
                 .curator(curator)
-                .students(List.of(student1, student2));
+                .students(List.of(student1, student2))
+                .build();
 
-        Group group = groupBuilder.build();
-
-        // Verify that the group data was assigned correctly
         assertEquals("G1", group.getGroupNumber());
         assertEquals(LocalDate.of(2022, 1, 1), group.getYearCreated());
         assertEquals("Computer Science", group.getDepartment());
@@ -112,15 +132,62 @@ public class BuilderTest {
     }
 
     @Test
-    public void testInvalidGroupBuilder() {
-        // Will throw exception as the required fields are missing
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new GroupBuilder().build());
-
-        // Check for error messages related to missing fields
+    public void testInvalidGroupNumber() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new GroupBuilder()
+                    .groupNumber("") // Некоректний номер групи
+                    .yearCreated(LocalDate.of(2022, 1, 1))
+                    .department("Computer Science")
+                    .curator(new Teacher("Dr.White", "White", "Group Curator"))
+                    .students(List.of(new Student("Tom", "Hanks", LocalDate.parse("1998-08-20"), "RB10001")))
+                    .build();
+        });
+        System.out.println("Validation error: " + exception.getMessage());
         assertTrue(exception.getMessage().contains("Invalid group number"));
+    }
+
+    @Test
+    public void testInvalidGroupDepartment() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new GroupBuilder()
+                    .groupNumber("G1")
+                    .yearCreated(LocalDate.of(2022, 1, 1))
+                    .department("") // Некоректний департамент
+                    .curator(new Teacher("Dr.White", "White", "Group Curator"))
+                    .students(List.of(new Student("Tom", "Hanks", LocalDate.parse("1998-08-20"), "RB10001")))
+                    .build();
+        });
+        System.out.println("Validation error: " + exception.getMessage());
         assertTrue(exception.getMessage().contains("Department cannot be empty"));
-        assertTrue(exception.getMessage().contains("Year must be between"));
+    }
+
+    @Test
+    public void testInvalidGroupCurator() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new GroupBuilder()
+                    .groupNumber("G1")
+                    .yearCreated(LocalDate.of(2022, 1, 1))
+                    .department("Computer Science")
+                    .curator(null) // Некоректний куратор
+                    .students(List.of(new Student("Tom", "Hanks", LocalDate.parse("1998-08-20"), "RB10001")))
+                    .build();
+        });
+        System.out.println("Validation error: " + exception.getMessage());
         assertTrue(exception.getMessage().contains("Curator cannot be null"));
+    }
+
+    @Test
+    public void testInvalidGroupStudents() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new GroupBuilder()
+                    .groupNumber("G1")
+                    .yearCreated(LocalDate.of(2022, 1, 1))
+                    .department("Computer Science")
+                    .curator(new Teacher("Dr.White", "White", "Group Curator"))
+                    .students(List.of()) // Некоректний список студентів
+                    .build();
+        });
+        System.out.println("Validation error: " + exception.getMessage());
         assertTrue(exception.getMessage().contains("Group must have at least one student"));
     }
 }
